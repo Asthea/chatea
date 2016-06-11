@@ -13,6 +13,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
 
+
 namespace RiftChatMetro
 {
     public class ContentControls

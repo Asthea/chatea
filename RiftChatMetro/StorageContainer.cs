@@ -15,15 +15,12 @@ namespace RiftChatMetro
         {
             this.identity = identity;
             this.linesS = new Stack<Line>();
-            //this.filterL = new List<Filter>();
-            this.lEval = new LineEvaluator();
         }
 
-        public void storeElement(string line)
+        public void storeElement(Line line)
         {
-            if (line == null || line == "") return;
-            Line l = lEval.createLine(line);
-            linesS.Push(l);
+            if (line == null) return;
+            linesS.Push(line);
         }
 
         public Line getNextElement()
@@ -61,8 +58,6 @@ namespace RiftChatMetro
 
         private string identity;
         private Stack<Line> linesS;
-        private LineEvaluator lEval;
-        //private List<Filter> filterL;
 
     }
 }

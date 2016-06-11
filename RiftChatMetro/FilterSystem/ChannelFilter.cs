@@ -12,13 +12,13 @@ namespace RiftChatMetro.FilterSystem
     {
         private Dictionary<string, Brush> channelColors;
         private Dictionary<string, Brush> colors;
-        private Dictionary<string, List<string>> channelNames;
+        private Dictionary<List<string>, string> channelNames;
 
         public ChannelFilter()
         {
             channelColors = new Dictionary<string, Brush>();
             colors = new Dictionary<string, Brush>();
-            channelNames = new Dictionary<string, List<string>>();
+            channelNames = new Dictionary<List<string>, string>();
 
             initialize();
         }
@@ -35,20 +35,46 @@ namespace RiftChatMetro.FilterSystem
 
         public void filter(Line line)
         {
-            if (channelNames.ContainsKey(line.Channel.ToLower()))
+            if (line == null) return;
+            string text = null;
+
+            if (!line.Channel.Equals("whisper") || !line.Channel.Equals("unknown"))
             {
-                line.Color = channelColors[line.Channel];
+                List<string> split = line.Channel.Split(new char[] { ' ' }).ToList<string>();
+                for (int i = 0; i < split.Count; ++i)
+                {
+                    text += split[i] + " ";
+                }
+
+                text = text.Trim();
+            }
+            else if (line.Channel == "whisper")
+            {
+                text = "whisper";
             }
             else
             {
-                foreach (KeyValuePair<string, List<string>> kvp in channelNames)
+                text = "unknown";
+            }
+
+            if (channelNames.ContainsValue(translateColor(text.ToLower())))
+            {
+                line.Color = channelColors[translateColor(text.ToLower())];
+            }
+            else
+            {
+                foreach (KeyValuePair<List<string>, string> kvp in channelNames)
                 {
-                    foreach (var element in kvp.Value)
+                    foreach (var element in kvp.Key)
                     {
                         string pattern = "\\b" + element.ToLower() + "\\b";
-                        if (Regex.IsMatch(line.Channel.ToLower(), pattern, RegexOptions.IgnoreCase))
+                        if (Regex.IsMatch(text.ToLower(), pattern, RegexOptions.IgnoreCase))
                         {
-                            line.Color = channelColors[line.Channel];
+                            line.Color = channelColors[translateColor(text.ToLower())];
+                        }
+                        else
+                        {
+                            line.Color = colors["gray"];
                         }
                     }
                 }
@@ -60,11 +86,28 @@ namespace RiftChatMetro.FilterSystem
             return "ChannelFilter";
         }
 
+        private string translateColor(string channelName)
+        {
+            string color = "unknown";
+
+            foreach (KeyValuePair<List<string>, string> kvp in channelNames)
+            {
+                foreach (string s in kvp.Key)
+                {
+                    if (s == channelName)
+                        color = kvp.Value;
+                }
+            }
+
+            return color;
+        }
+
         private void initialize()
         {
             colors.Add("orange", new SolidColorBrush(Color.FromRgb(255, 165, 0)));
             colors.Add("blue", new SolidColorBrush(Color.FromRgb(20, 130, 180)));
             colors.Add("forestgreen", Brushes.ForestGreen);
+            colors.Add("gray", Brushes.Gray);
             colors.Add("darkpink", new SolidColorBrush(Color.FromRgb(233, 24, 95)));
             colors.Add("coral", new SolidColorBrush(Color.FromRgb(255, 127, 80)));
             colors.Add("tomato", new SolidColorBrush(Color.FromRgb(255, 99, 71)));
@@ -80,16 +123,21 @@ namespace RiftChatMetro.FilterSystem
             channelColors.Add("group", colors["coral"]);
             channelColors.Add("raid", colors["tomato"]);
 
-            channelNames.Add("level 1-29", new List<string>() { "level 1-29", "stufe 1-29", "niveau 1-29" });
-            channelNames.Add("level 30-49", new List<string>() { "level 30-49", "stufe 30-49", "niveau 30-49" });
-            channelNames.Add("level 50-59", new List<string>() { "level 50-59", "stufe 50-59", "niveau 50-59" });
-            channelNames.Add("level 60-64", new List<string>() { "level 60-64", "stufe 60-64", "niveau 60-64" });
-            channelNames.Add("level 65", new List<string>() { "level 65", "stufe 65", "niveau 65" });
-            channelNames.Add("guild", new List<string>() { "guild" , "gilde"});
-            channelNames.Add("whisper", new List<string>() { "whisper", "flüstert", "to", "an" });
-            channelNames.Add("crossevents", new List<string>() { "crossevents" });
-            channelNames.Add("group", new List<string>() { "group", "gruppe" });
-            channelNames.Add("raid", new List<string>() { "raid", "schlachtzug" });
+            channelNames.Add(new List<string>() { "level 1-29", "stufe 1-29", "niveau 1-29" }, "level 1-29");
+            channelNames.Add(new List<string>() { "level 30-49", "stufe 30-49", "niveau 30-49" }, "level 30-49");
+            channelNames.Add(new List<string>() { "level 50-59", "stufe 50-59", "niveau 50-59" }, "level 50-59");
+            channelNames.Add(new List<string>() { "level 60-64", "stufe 60-64", "niveau 60-64" }, "level 60-64");
+            channelNames.Add(new List<string>() { "level 65", "stufe 65", "niveau 65" }, "level 65");
+            channelNames.Add(new List<string>() { "guild" , "gilde"}, "guild");
+            channelNames.Add(new List<string>() { "whisper", "flüstert", "to", "an" }, "whisper");
+            channelNames.Add(new List<string>() { "crossevents" }, "crossevents");
+            channelNames.Add(new List<string>() { "group", "gruppe" }, "group");
+            channelNames.Add(new List<string>() { "raid", "schlachtzug" }, "raid");
+        }
+
+        public void setColor(Color color)
+        {
+            throw new NotImplementedException();
         }
     }
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace RiftChatMetro.FilterSystem
 {
@@ -74,5 +75,9 @@ namespace RiftChatMetro.FilterSystem
             return "soundfilter";
         }
 
+        public void setColor(Color color)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

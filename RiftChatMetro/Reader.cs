@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RiftChatMetro.FilterSystem;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -12,21 +13,25 @@ namespace RiftChatMetro
 {
     class Reader
     {
-        public Reader(string fullPath, StorageContainer sc)
+        public Reader(string fullPath, StorageContainer sc, LineEvaluator lEval)
         {
             this.fullPath = fullPath;
             this.sc = sc;
+            this.lEval = lEval;
 
             openFile();
         }
 
         public void read()
         {
-            string line = file.ReadLine();
+            string readLine = file.ReadLine();
+            if (readLine == "") return;
+            if (readLine == null) return;
 
             if (currPosition <= fStream.Length)
             {
                 currPosition = fStream.Position;
+                Line line = lEval.createLine(readLine);
                 sc.storeElement(line);
             }
         }
@@ -37,7 +42,7 @@ namespace RiftChatMetro
             file.Dispose();
             file.Close();
 
-            //  Clean file before exiting program
+            // Clean file before exiting program
             //File.WriteAllText(fullPath, String.Empty);
         }
 
@@ -50,8 +55,9 @@ namespace RiftChatMetro
         {
             fStream = new FileStream(fullPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
             file = new System.IO.StreamReader(fStream);
-            //  Start reading at Begin/End of file
-            this.fStream.Seek(0, SeekOrigin.End);
+
+            // Start reading at Begin/End of file
+            this.fStream.Seek(0, SeekOrigin.Begin);
             currPosition = fStream.Position;
         }
 
@@ -62,6 +68,8 @@ namespace RiftChatMetro
         private System.IO.StreamReader file;
         private FileStream fStream;
         private long currPosition;
+        private List<Filter> filters;
+        private LineEvaluator lEval;
 
     }
 }

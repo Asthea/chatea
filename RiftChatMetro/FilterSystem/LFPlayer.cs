@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace RiftChatMetro.FilterSystem
 {
@@ -10,6 +11,7 @@ namespace RiftChatMetro.FilterSystem
     {
         private bool isActivated;
         private string playerName;
+        private Color color;
 
         public LFPlayer(string playerName)
         {
@@ -29,16 +31,21 @@ namespace RiftChatMetro.FilterSystem
 
         public void filter(Line line)
         {
-            if (line.Player.ToLower() == playerName.ToLower())
+            if (line.Player.ToLower().Contains(playerName.ToLower()))
             {
-                line.Color = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(178, 34, 34));
-                line.ContentColor = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(178, 34, 34));
+                line.Color = new System.Windows.Media.SolidColorBrush(this.color);
+                line.ContentColor = new System.Windows.Media.SolidColorBrush(this.color);
             }
         }
 
         public string getIdentity()
         {
             return "LFPlayer";
+        }
+
+        public void setColor(Color color)
+        {
+            this.color = color;
         }
     }
 }

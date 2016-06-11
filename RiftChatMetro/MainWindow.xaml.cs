@@ -34,6 +34,7 @@ namespace RiftChatMetro
         private ContentControls cc;
         private StorageContainer sc;
         private Dictionary<string, Filter> filterD;
+        private LineEvaluator lEval;
 
         private System.Windows.Threading.DispatcherTimer dispatcherTimer1 = new System.Windows.Threading.DispatcherTimer();
         private System.Windows.Threading.DispatcherTimer dispatcherTimer2 = new System.Windows.Threading.DispatcherTimer();
@@ -52,6 +53,7 @@ namespace RiftChatMetro
             cc.addDataGrid("global", dg1);
             cc.addDataGrid("whisper", dg2);
             cc.addDataGrid("guild", dg3);
+            this.lEval = new LineEvaluator();
 
             lb1.ItemsSource = clItemL;
             alertsLB1.ItemsSource = alertsCLItemL;
@@ -65,10 +67,14 @@ namespace RiftChatMetro
             dispatcherTimer2.Start();
 
             string path = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\RIFT\\";
-            string logFilename = "Log.txt";
+            string logFilename = "log.txt";
 
             fullPath = path + logFilename;
-            this.reader = new Reader(fullPath, sc);
+
+            Filter channelFilter = new ChannelFilter();
+            lEval.registerFilter(channelFilter);
+
+            this.reader = new Reader(fullPath, sc, lEval);          
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -83,7 +89,7 @@ namespace RiftChatMetro
         private void dispatcherTimer_Tick2(object sender, EventArgs e)
         {
             Line line = reader.getStorage().getNextElement();
-            if (line == null) return;
+            //if (line == null) return;
             cc.write(line);
         }
 
@@ -104,15 +110,13 @@ namespace RiftChatMetro
             cli.Content = tb1.Text;
             cli.IsChecked = true;
 
-            Filter channelFilter = new ChannelFilter();
-            this.filterD.Add(tb1.Text, channelFilter);
-            //this.reader.getStorage().registerFilter(channelFilter);
-
             //MacroManager.addMapping(cli.Content, new SolidColorBrush(colpi1.SelectedColor));
             //sc.registerCustomMask(cli.Content, new SolidColorBrush(colpi1.SelectedColor));
 
             Filter playerFilter = new LFPlayer(tb1.Text);
+            playerFilter.setColor(colpi1.SelectedColor);
             this.filterD.Add(tb1.Text, playerFilter);
+            lEval.registerFilter(playerFilter);
             //this.reader.getStorage().registerFilter(playerFilter);
 
             clItemL.Add(cli);
@@ -131,7 +135,6 @@ namespace RiftChatMetro
                 //MacroManager.deleteMapping(item.Content);
                 //sc.unregisterCustomMasks();
             }
-
             foreach(KeyValuePair<string, Filter> kvp in filterD)
             {
                 //this.reader.getStorage().unregisterFilter(kvp.Value);
@@ -157,7 +160,7 @@ namespace RiftChatMetro
         {
             if (dg1.SelectedItem == null) return;
             var selectedItem = dg1.SelectedItem as Line;
-            Debug.WriteLine(selectedItem.Content);
+            //Debug.WriteLine(selectedItem.Content);
 
             //  TODO: Implement clipboard action!
         }

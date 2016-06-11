@@ -19,8 +19,6 @@ namespace RiftChatMetro
         public LineEvaluator()
         {
             this.filterL = new List<Filter>();
-            Filter channelFilter = new ChannelFilter();
-            registerFilter(channelFilter);
         }
 
         public Line createLine(string text)
@@ -49,6 +47,7 @@ namespace RiftChatMetro
             this.filterL.Remove(filter);
         }
 
+        // TODO: should actually be implemented with a strategy design pattern
         private Line evaluate(string text)
         {
             if (text.Substring(text.Length - 1).Contains("-"))
@@ -76,20 +75,52 @@ namespace RiftChatMetro
             line.Content = line.Content.TrimStart();
 
             //  Get Player and Channel information via RegEx
+            // if count == 2 -> normal channel
             var v = Regex.Matches(divide[0], @"\[([^]]*)\]");
-
-            //  Get potential link candidates
-            var links = Regex.Matches(divide[divide.Count - 1], @"\[([^]]*)\]");
+            if (v.Count > 0 && v[0].Value.Contains("@"))
+            {
+                var shardName = v[0].Value.Split(new char[] { '@' }).ToList<string>();
+                line.Shard = shardName[1].Substring(0, shardName[1].Length - 1);
+                line.Channel = shardName[0].Substring(1, shardName[0].Length - 1);
+            }
+            else
+            {
+                line.Shard = "unknown";
+            }
 
             //  Check type of message
             if (v.Count == 1)
             {
-                line.Channel = MacroManager.getMacroText(text);
+                List<string> split2 = text.Split(new char[] { ':' }).ToList<string>();
+
+                //Console.WriteLine("v.Count = 1; Line: " + text);
+                string check = split2[3].ToLower();
+                foreach (string s in split)
+                {
+                    if (s.Equals("to") || s.Equals("an") || s.Equals("whisper") || s.Equals("flüster"))
+                    {
+                        line.Channel = "whisper";
+                    }
+                    else
+                    {
+                        line.Channel = "unknown";
+                    }
+                }
                 line.Player = v[0].Value.Substring(1, v[0].Length - 2) + "    ";
             }
             else if (v.Count == 2)
             {
-                line.Channel = MacroManager.getMacroText(v[0].Value.Substring( 1, v[0].Length - 2 ));
+                var channelName = v[0].Value.Substring(1, v[0].Value.Length-2).Split(new char[] { '.' });
+                if (channelName.Count() > 1 && channelName[1].Contains("@"))
+                    channelName[1] = channelName[1].Split(new char[] { '@' })[0];
+                if (channelName.Count() > 1)
+                {
+                    line.Channel = channelName[1].Trim();
+                }
+                else
+                {
+                    line.Channel = v[0].Value.Substring(1, v[0].Value.Length-2).Trim();
+                }
                 line.Player = v[1].Value.Substring(1, v[1].Length - 2) + "    ";
             }
             else
@@ -97,6 +128,8 @@ namespace RiftChatMetro
                 return null;
             }
 
+            //  Get potential link candidates
+            var links = Regex.Matches(divide[divide.Count - 1], @"\[([^]]*)\]");
             //  Add true link-candidates to line
             foreach (var item in links)
             {
@@ -107,7 +140,7 @@ namespace RiftChatMetro
             }
 
             //  Get color coding
-            line.Color = MacroManager.getColorCode(line.Channel);
+            line.Color = null;
             line.ContentColor = null;
 
             //  Check for custom masks
