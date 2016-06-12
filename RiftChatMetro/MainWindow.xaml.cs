@@ -39,13 +39,12 @@ namespace RiftChatMetro
         private System.Windows.Threading.DispatcherTimer dispatcherTimer1 = new System.Windows.Threading.DispatcherTimer();
         private System.Windows.Threading.DispatcherTimer dispatcherTimer2 = new System.Windows.Threading.DispatcherTimer();
 
-        private ObservableCollection<CheckedListItem> clItemL = new ObservableCollection<CheckedListItem>();
+        public ObservableCollection<CheckedListItem> clItemL = new ObservableCollection<CheckedListItem>();
         private ObservableCollection<CheckedListItem> alertsCLItemL = new ObservableCollection<CheckedListItem>();
 
         public MainWindow()
         {
             InitializeComponent();
-            //MacroManager.Initialize();
 
             filterD = new Dictionary<string, Filter>();
             sc = new StorageContainer("chat");
@@ -58,6 +57,7 @@ namespace RiftChatMetro
             lb1.ItemsSource = clItemL;
             alertsLB1.ItemsSource = alertsCLItemL;
 
+            //  --------------------------------------------------- //
             dispatcherTimer1.Tick += dispatcherTimer_Tick1;
             dispatcherTimer1.Interval = new TimeSpan(0, 0, 0, 0, 10);
             dispatcherTimer1.Start();
@@ -65,6 +65,7 @@ namespace RiftChatMetro
             dispatcherTimer2.Tick += dispatcherTimer_Tick2;
             dispatcherTimer2.Interval = new TimeSpan(0, 0, 0, 0, 10);
             dispatcherTimer2.Start();
+            //  --------------------------------------------------- //
 
             string path = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\RIFT\\";
             string logFilename = "log.txt";
@@ -89,7 +90,6 @@ namespace RiftChatMetro
         private void dispatcherTimer_Tick2(object sender, EventArgs e)
         {
             Line line = reader.getStorage().getNextElement();
-            //if (line == null) return;
             cc.write(line);
         }
 
@@ -110,16 +110,16 @@ namespace RiftChatMetro
             cli.Content = tb1.Text;
             cli.IsChecked = true;
 
-            //MacroManager.addMapping(cli.Content, new SolidColorBrush(colpi1.SelectedColor));
-            //sc.registerCustomMask(cli.Content, new SolidColorBrush(colpi1.SelectedColor));
-
             Filter playerFilter = new LFPlayer(tb1.Text);
             playerFilter.setColor(colpi1.SelectedColor);
-            this.filterD.Add(tb1.Text, playerFilter);
             lEval.registerFilter(playerFilter);
-            //this.reader.getStorage().registerFilter(playerFilter);
 
+            Filter contentFilter = new ContentFilter(tb1.Text);
+            contentFilter.setColor(colpi1.SelectedColor);
+            lEval.registerFilter(contentFilter);
+            
             clItemL.Add(cli);
+            
             lb1.Items.Refresh();
         }
 
@@ -160,9 +160,9 @@ namespace RiftChatMetro
         {
             if (dg1.SelectedItem == null) return;
             var selectedItem = dg1.SelectedItem as Line;
-            //Debug.WriteLine(selectedItem.Content);
 
-            //  TODO: Implement clipboard action!
+            // TODO: Implement clipboard action!
+            // ...
         }
 
         private void dg1_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
@@ -199,11 +199,11 @@ namespace RiftChatMetro
             {
                 Filter filter = new SoundFilter(soundfilterTB.Text);
                 this.filterD.Add((string)soundfilterCB.Content, filter);
-                //this.reader.getStorage().registerFilter(filter);
+                lEval.registerFilter(filter);
             }
             else
             {
-                //this.reader.getStorage().unregisterFilter(filterD[(string)soundfilterCB.Content]);
+                lEval.unregisterFilter(filterD[(string)soundfilterCB.Content]);
                 this.filterD.Remove((string)soundfilterCB.Content);
             }
         }

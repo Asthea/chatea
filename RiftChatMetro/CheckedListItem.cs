@@ -1,4 +1,13 @@
-﻿using System;
+﻿/**
+ * 
+    https://stackoverflow.com/questions/4039376/how-to-get-selected-items-in-wpf-checkbox-listbox?rq=1
+    https://stackoverflow.com/questions/21193242/wpf-checkedlistbox-how-to-get-selected-item
+    https://stackoverflow.com/questions/6915329/listbox-and-finding-the-selected-checkbox?rq=1
+    https://stackoverflow.com/questions/31015851/retrieving-selected-items-from-checked-list-box
+ *
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
