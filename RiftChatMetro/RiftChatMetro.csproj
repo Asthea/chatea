@@ -103,7 +103,6 @@
     <Compile Include="FilterSystem\ChannelFilter.cs" />
     <Compile Include="FilterSystem\ContentFilter.cs" />
     <Compile Include="FilterSystem\Filter.cs" />
-    <Compile Include="FilterSystem\FilterContext.cs" />
     <Compile Include="FilterSystem\LFPlayer.cs" />
     <Compile Include="LineObjectPool.cs" />
     <Compile Include="MainViewModel.cs" />

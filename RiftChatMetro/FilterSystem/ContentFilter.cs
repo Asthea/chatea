@@ -12,13 +12,13 @@ namespace RiftChatMetro.FilterSystem
         private bool isActivated;
         private string content;
         private Color color;
-        private FilterContext context;
+        private long identity;
 
-        public ContentFilter(string content)
+        public ContentFilter(string content, long identity)
         {
             this.isActivated = true;
             this.content = content;
-            this.context = new FilterContext(content, getIdentity());
+            this.identity = identity;
         }
 
         public void activate()
@@ -33,21 +33,26 @@ namespace RiftChatMetro.FilterSystem
 
         public void filter(Line line)
         {
-            if (line.Content.ToLower().Contains(content.ToLower()))
+            if (isActivated == true && line.Content.ToLower().Contains(content.ToLower()))
             {
                 line.Color = new System.Windows.Media.SolidColorBrush(this.color);
                 line.ContentColor = new System.Windows.Media.SolidColorBrush(this.color);
             }
         }
 
-        public string getIdentity()
+        public long getIdentity()
         {
-            return "ContentFilter";
+            return this.identity;
         }
 
         public void setColor(Color color)
         {
             this.color = color;
+        }
+
+        public string getName()
+        {
+            return "contentfilter" + Convert.ToString(identity);
         }
     }
 }

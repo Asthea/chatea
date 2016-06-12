@@ -35,6 +35,7 @@ namespace RiftChatMetro
         private StorageContainer sc;
         private Dictionary<string, Filter> filterD;
         private LineEvaluator lEval;
+        private long id;
 
         private System.Windows.Threading.DispatcherTimer dispatcherTimer1 = new System.Windows.Threading.DispatcherTimer();
         private System.Windows.Threading.DispatcherTimer dispatcherTimer2 = new System.Windows.Threading.DispatcherTimer();
@@ -51,9 +52,10 @@ namespace RiftChatMetro
             sc = new StorageContainer("chat");
             cc = new ContentControls("chat", lineOP);
             cc.addDataGrid("global", dg1);
-            cc.addDataGrid("whisper", dg2);
-            cc.addDataGrid("guild", dg3);
+            //cc.addDataGrid("whisper", dg2);
+            //cc.addDataGrid("guild", dg3);
             this.lEval = new LineEvaluator();
+            this.id = 0;
 
             lb1.ItemsSource = clItemL;
             alertsLB1.ItemsSource = alertsCLItemL;
@@ -100,13 +102,32 @@ namespace RiftChatMetro
         private void dispatcherTimer_Tick3(object sender, EventArgs e)
         {
             var isNotCheckedItem = clItemL.Where(item => item.IsChecked == false);
-            Debug.WriteLine(isNotCheckedItem.Count());
+            var isCheckedItem = clItemL.Where(item => item.IsChecked == true);
             
+            // deactive unchecked filters
             foreach (CheckedListItem c in isNotCheckedItem)
             {
-                // deactivate filter 
-                // ...
+                var filters = lEval.getActivatedFiltersByID(c.ID);
+                foreach (Filter f in filters)
+                {
+                    lEval.deactivateFilter(f);
+                }
             }
+            // activate checked filters
+            foreach (CheckedListItem c in isCheckedItem)
+            {
+                var filters = lEval.getDeactivatedFiltersByID(c.ID);
+                foreach (Filter f in filters)
+                {
+                    lEval.activateFilter(f);
+                }
+            }
+        }
+
+        private long generateID()
+        {
+            id += 1;
+            return id;
         }
 
         private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -125,12 +146,13 @@ namespace RiftChatMetro
             CheckedListItem cli = new CheckedListItem();
             cli.Content = tb1.Text;
             cli.IsChecked = true;
+            cli.ID = generateID();
 
-            Filter playerFilter = new LFPlayer(tb1.Text);
+            Filter playerFilter = new LFPlayer(tb1.Text, cli.ID);
             playerFilter.setColor(colpi1.SelectedColor);
             lEval.registerFilter(playerFilter);
 
-            Filter contentFilter = new ContentFilter(tb1.Text);
+            Filter contentFilter = new ContentFilter(tb1.Text, cli.ID);
             contentFilter.setColor(colpi1.SelectedColor);
             lEval.registerFilter(contentFilter);
             
@@ -141,22 +163,6 @@ namespace RiftChatMetro
         private void tb1_GotFocus(object sender, RoutedEventArgs e)
         {
             tb1.Text = "";
-        }
-
-        private void b2_Click(object sender, RoutedEventArgs e)
-        {
-            foreach (var item in clItemL)
-            {
-                //MacroManager.deleteMapping(item.Content);
-                //sc.unregisterCustomMasks();
-            }
-            foreach(KeyValuePair<string, Filter> kvp in filterD)
-            {
-                //this.reader.getStorage().unregisterFilter(kvp.Value);
-            }
-
-            clItemL.Clear();
-            lb1.Items.Refresh();
         }
 
         private System.Windows.Forms.ColorDialog cd = new System.Windows.Forms.ColorDialog();
@@ -212,14 +218,14 @@ namespace RiftChatMetro
 
             if (soundfilterCB.IsChecked == true)
             {
-                Filter filter = new SoundFilter(soundfilterTB.Text);
-                this.filterD.Add((string)soundfilterCB.Content, filter);
-                lEval.registerFilter(filter);
+                //Filter filter = new SoundFilter(soundfilterTB.Text);
+                //this.filterD.Add((string)soundfilterCB.Content, filter);
+                //lEval.registerFilter(filter);
             }
             else
             {
-                lEval.unregisterFilter(filterD[(string)soundfilterCB.Content]);
-                this.filterD.Remove((string)soundfilterCB.Content);
+                //lEval.unregisterFilter(filterD[(string)soundfilterCB.Content]);
+                //this.filterD.Remove((string)soundfilterCB.Content);
             }
         }
 
@@ -234,9 +240,11 @@ namespace RiftChatMetro
             CheckedListItem cli = new CheckedListItem();
             cli.Content = alertsTB1.Text;
             cli.IsChecked = true;
+            cli.ID = generateID();
 
-            Filter filter = new LFPlayer(alertsTB1.Text);
+            Filter filter = new LFPlayer(alertsTB1.Text, cli.ID);
             this.filterD.Add(alertsTB1.Text, filter);
+            lEval.registerFilter(filter);
             //this.reader.getStorage().registerFilter(filter);
 
             alertsCLItemL.Add(cli);
@@ -264,7 +272,20 @@ namespace RiftChatMetro
         {
             alertsTB1.Text = "";
         }
+
+        private void deleteUnCheckedButtonClick(object sender, RoutedEventArgs e)
+        {            
+            //lEval.deleteDeactivatedFilters();
+
+            var isNotCheckedItem = clItemL.Where(item => item.IsChecked == false);
+            foreach (CheckedListItem c in isNotCheckedItem.ToList()) // .ToList() counters enumeration error! \ (: /
+            {
+                clItemL.Remove(c);
+            }
+            lb1.Items.Refresh();
+        }
     }
+
 }
 
 /**

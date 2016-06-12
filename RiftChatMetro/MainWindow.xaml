@@ -19,7 +19,7 @@
 
                       WindowTransitionsEnabled="False"
 
-                      WindowStartupLocation="CenterScreen" Height="914.6" Width="1007" HorizontalAlignment="Center" VerticalAlignment="Center">
+                      WindowStartupLocation="CenterScreen" Height="652.6" Width="1007" HorizontalAlignment="Center" VerticalAlignment="Center">
 
     <Controls:MetroWindow.Resources>
         <ResourceDictionary>
@@ -78,9 +78,9 @@
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
-                    <Button x:Name="b2" Content="Alle löschen" HorizontalAlignment="Left" Margin="388,217,0,8" Width="88" Click="b2_Click"/>
                     <Button x:Name="b3" HorizontalAlignment="Left" Margin="10,295,0,0" VerticalAlignment="Top" Width="53" Height="29"/>
                     <xctk:ColorPicker x:Name="colpi1" Margin="103,20,330,207" />
+                    <Button x:Name="deleteUnCheckedButton" Content="UNMARKIERTE LÖSCHEN" HorizontalAlignment="Left" Margin="300,215,0,10" Width="176" Click="deleteUnCheckedButtonClick"/>
                 </Grid>
             </TabItem>
             <TabItem x:Name="tab2" Header="Alerts">
@@ -111,7 +111,7 @@
             </TabItem>
         </Controls:MetroAnimatedTabControl>
 
-        <DataGrid ItemsSource="{Binding}" x:Name="dg1" VerticalAlignment="Top" Width="Auto" HorizontalAlignment="Left" Margin="10,310,0,0" PreviewMouseDoubleClick="dg1_PreviewMouseDoubleClick" IsSynchronizedWithCurrentItem="True" IsHitTestVisible="True" IsTextSearchCaseSensitive="True" PreviewMouseWheel="dg1_PreviewMouseWheel" MouseLeave="dg1_MouseLeave" AutoGenerateColumns="False" LoadingRow="dg1_LoadingRow" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#FF086FB9" Height="274" IsReadOnly="True" FontSize="14" ClipToBounds="True" HorizontalScrollBarVisibility="Disabled" EnableColumnVirtualization="True" VerticalScrollBarVisibility="Visible" >
+        <DataGrid ItemsSource="{Binding}" x:Name="dg1" VerticalAlignment="Top" Height="Auto" Width="Auto" HorizontalAlignment="Left" Margin="10,310,0,0" PreviewMouseDoubleClick="dg1_PreviewMouseDoubleClick" IsSynchronizedWithCurrentItem="True" IsHitTestVisible="True" IsTextSearchCaseSensitive="True" PreviewMouseWheel="dg1_PreviewMouseWheel" MouseLeave="dg1_MouseLeave" AutoGenerateColumns="False" LoadingRow="dg1_LoadingRow" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#FF086FB9" IsReadOnly="True" FontSize="14" ClipToBounds="True" HorizontalScrollBarVisibility="Disabled" EnableColumnVirtualization="True" VerticalScrollBarVisibility="Visible" >
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Header" Binding="{Binding Header}" Width="*">
                     <DataGridTextColumn.ElementStyle>
@@ -152,7 +152,7 @@
             </DataGrid.Columns>
         </DataGrid>
 
-        <DataGrid ItemsSource="{Binding}" x:Name="dg2" HorizontalAlignment="Left" Margin="0,719,0,0" Width="Auto" PreviewMouseDoubleClick="dg1_PreviewMouseDoubleClick" IsSynchronizedWithCurrentItem="True" IsHitTestVisible="True" IsTextSearchCaseSensitive="True" PreviewMouseWheel="dg1_PreviewMouseWheel" MouseLeave="dg1_MouseLeave" AutoGenerateColumns="False" LoadingRow="dg1_LoadingRow" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#FF086FB9" Height="135" VerticalAlignment="Top" IsReadOnly="True" FontSize="12" VerticalScrollBarVisibility="Visible" >
+        <!-- <DataGrid ItemsSource="{Binding}" x:Name="dg2" HorizontalAlignment="Left" Margin="0,719,0,0" Width="Auto" PreviewMouseDoubleClick="dg1_PreviewMouseDoubleClick" IsSynchronizedWithCurrentItem="True" IsHitTestVisible="True" IsTextSearchCaseSensitive="True" PreviewMouseWheel="dg1_PreviewMouseWheel" MouseLeave="dg1_MouseLeave" AutoGenerateColumns="False" LoadingRow="dg1_LoadingRow" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#FF086FB9" Height="135" VerticalAlignment="Top" IsReadOnly="True" FontSize="12" VerticalScrollBarVisibility="Visible" >
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Header" Binding="{Binding Header}" Width="*">
                     <DataGridTextColumn.ElementStyle>
@@ -240,7 +240,7 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
             </DataGrid.Columns>
-        </DataGrid>
+        </DataGrid> -->
         <CheckBox x:Name="soundfilterCB" Content="Soundfilter" HorizontalAlignment="Left" Margin="519,50,0,0" VerticalAlignment="Top" Click="soundfilterCB_Click"/>
         <TextBox x:Name="soundfilterTB" HorizontalAlignment="Left" Height="23" Margin="629,47,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="262"/>
 

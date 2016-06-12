@@ -12,7 +12,8 @@ namespace RiftChatMetro.FilterSystem
         void filter(Line line);
         void deactivate();
         void activate();
-        string getIdentity();
+        long getIdentity();
+        string getName();
         void setColor(Color color);
         //void setID(int id);
     }

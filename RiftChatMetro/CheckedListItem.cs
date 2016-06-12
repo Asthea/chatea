@@ -42,6 +42,17 @@ namespace RiftChatMetro
             }
         }
 
+        public long ID
+        {
+            get { return this.id; }
+            set
+            {
+                this.id = value;
+                OnPropertyChanged("ID");
+            }
+        }
+
+        private long id;
         private string content;
         private bool isChecked;
 

@@ -68,7 +68,6 @@ namespace RiftChatMetro
         private System.IO.StreamReader file;
         private FileStream fStream;
         private long currPosition;
-        private List<Filter> filters;
         private LineEvaluator lEval;
 
     }

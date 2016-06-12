@@ -12,11 +12,13 @@ namespace RiftChatMetro.FilterSystem
         private bool isActivated;
         private string playerName;
         private Color color;
+        private long identity;
 
-        public LFPlayer(string playerName)
+        public LFPlayer(string playerName, long identity)
         {
             this.isActivated = true;
             this.playerName = playerName;
+            this.identity = identity;
         }
 
         public void activate()
@@ -31,21 +33,26 @@ namespace RiftChatMetro.FilterSystem
 
         public void filter(Line line)
         {
-            if (line.Player.ToLower().Contains(playerName.ToLower()))
+            if (isActivated == true && line.Player.ToLower().Contains(playerName.ToLower()))
             {
                 line.Color = new System.Windows.Media.SolidColorBrush(this.color);
                 line.ContentColor = new System.Windows.Media.SolidColorBrush(this.color);
             }
         }
 
-        public string getIdentity()
+        public long getIdentity()
         {
-            return "LFPlayer";
+            return this.identity;
         }
 
         public void setColor(Color color)
         {
             this.color = color;
+        }
+
+        public string getName()
+        {
+            return "lfplayer" + Convert.ToString(identity);
         }
     }
 }

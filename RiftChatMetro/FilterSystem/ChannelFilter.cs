@@ -139,6 +139,17 @@ namespace RiftChatMetro.FilterSystem
         {
             throw new NotImplementedException();
         }
+
+        long Filter.getIdentity()
+        {
+            // there is only one ChannelFilter
+            return -1;
+        }
+
+        public string getName()
+        {
+            return "channelfilter";
+        }
     }
 
 }

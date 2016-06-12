@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -14,11 +15,13 @@ namespace RiftChatMetro
     {
 
         private Dictionary<string, Brush> customMaskD = new Dictionary<string, Brush>();
-        private List<Filter> filterL;
+        private List<Filter> activatedFilters;
+        private List<Filter> deactivatedFilters;
 
         public LineEvaluator()
         {
-            this.filterL = new List<Filter>();
+            this.activatedFilters = new List<Filter>();
+            this.deactivatedFilters = new List<Filter>();
         }
 
         public Line createLine(string text)
@@ -26,25 +29,79 @@ namespace RiftChatMetro
             return evaluate(text);
         }
 
-        //public void registerCustomMask(string mask, Brush color)
-        //{
-        //    if (customMaskD.ContainsKey(mask)) return;
-        //    customMaskD.Add(mask, color);
-        //}
-
-        //public void unregisterCustomMasks()
-        //{
-        //    customMaskD.Clear();
-        //}
-
         public void registerFilter(Filter filter)
         {
-            this.filterL.Add(filter);
+            this.activatedFilters.Add(filter);
         }
 
         public void unregisterFilter(Filter filter)
         {
-            this.filterL.Remove(filter);
+            if (this.activatedFilters.Contains(filter))
+            {
+                this.activatedFilters.Remove(filter);
+            }
+            else if (this.deactivatedFilters.Contains(filter))
+            {
+                this.deactivatedFilters.Remove(filter);
+            }
+        }
+
+        public List<Filter> getActivatedFiltersByID(long id)
+        {
+            var filtered = new List<Filter>();
+            foreach (Filter f in activatedFilters)
+            {
+                if (f.getIdentity().Equals(id))
+                    filtered.Add(f);
+            }
+
+            return filtered;
+        }
+
+        public List<Filter> getDeactivatedFiltersByID(long id)
+        {
+            var filtered = new List<Filter>();
+            foreach (Filter f in deactivatedFilters)
+            {
+                if (f.getIdentity().Equals(id))
+                    filtered.Add(f);
+            }
+            return filtered;
+        }
+
+        public List<Filter> getDeactivatedFilters()
+        {
+            return this.deactivatedFilters;
+        }
+
+        public void deleteDeactivatedFilters()
+        {
+            this.deactivatedFilters.Clear();
+        }
+
+        public void deleteActivatedFilters()
+        {
+            this.activatedFilters.Clear();
+        }
+
+        public void activateFilter(Filter filter)
+        {
+            if (activatedFilters.Contains(filter))
+                return;
+
+            filter.activate();
+            deactivatedFilters.Remove(filter);
+            activatedFilters.Add(filter);
+        }
+
+        public void deactivateFilter(Filter filter)
+        {
+            if (deactivatedFilters.Contains(filter))
+                return;
+
+            filter.deactivate();
+            activatedFilters.Remove(filter);
+            deactivatedFilters.Add(filter);
         }
 
         // TODO: should actually be implemented with a strategy design pattern
@@ -91,15 +148,16 @@ namespace RiftChatMetro
             //  Check type of message
             if (v.Count == 1)
             {
-                List<string> split2 = text.Split(new char[] { ':' }).ToList<string>();
+                List<string> split2 = text.Split(new char[] { ' ' }).ToList<string>();
 
                 //Console.WriteLine("v.Count = 1; Line: " + text);
-                string check = split2[3].ToLower();
-                foreach (string s in split)
+                //string check = split2[3].ToLower();
+                foreach (string s in split2)
                 {
-                    if (s.Equals("to") || s.Equals("an") || s.Equals("whisper") || s.Equals("flüster"))
+                    if (s.ToLower().Equals("to") || s.ToLower().Equals("an") || s.ToLower().Equals("whisper") || s.ToLower().Contains("flüster"))
                     {
                         line.Channel = "whisper";
+                        break;
                     }
                     else
                     {
@@ -143,6 +201,8 @@ namespace RiftChatMetro
             line.Color = null;
             line.ContentColor = null;
 
+            Debug.WriteLine(line.Channel + " | " + line.Content);
+
             //  Check for custom masks
             //evaluateCustomMasks(line);
             evaluateFilters(line);
@@ -163,7 +223,7 @@ namespace RiftChatMetro
 
         private void evaluateFilters(Line line)
         {
-            foreach (Filter f in filterL)
+            foreach (Filter f in activatedFilters)
             {
                 f.filter(line);
             }

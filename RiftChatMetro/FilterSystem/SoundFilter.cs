@@ -12,10 +12,12 @@ namespace RiftChatMetro.FilterSystem
     {
         private bool isActivated = true;
         private string name;
+        private long id;
 
-        public SoundFilter(string name)
+        public SoundFilter(string name, long id)
         {
             this.name = name;
+            this.id = id;
         }
 
         public void activate()
@@ -70,14 +72,19 @@ namespace RiftChatMetro.FilterSystem
             });
         }
 
-        public string getIdentity()
+        public long getIdentity()
         {
-            return "soundfilter";
+            return this.id;
         }
 
         public void setColor(Color color)
         {
-            throw new NotImplementedException();
+            return;
+        }
+
+        public string getName()
+        {
+            return "soundfilter" + Convert.ToString(getIdentity());
         }
     }
 }
