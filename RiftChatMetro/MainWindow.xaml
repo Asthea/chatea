@@ -69,7 +69,7 @@
                 <Grid x:Name="tab1grid" Background="#FF252525">
                     <TextBox x:Name="tb1" HorizontalAlignment="Left" Height="29" Margin="161,20,0,0" TextWrapping="Wrap" Text="Hier Suchmaske einfügen ..." VerticalAlignment="Top" Width="315" BorderBrush="White" Background="#FF1284B8" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontStyle="Italic" GotFocus="tb1_GotFocus"/>
                     <Button x:Name="b1" Content="Hinzufügen" HorizontalAlignment="Left" Margin="10,20,0,0" VerticalAlignment="Top" Width="88" Height="29" Click="b1_Click"/>
-                    <ListBox ItemsSource="{Binding clItemL}" SelectedItem="{Binding SelectedSection}"  IsSynchronizedWithCurrentItem="True" x:Name="lb1" HorizontalAlignment="Left" Height="134" Margin="10,69,0,0" VerticalAlignment="Top" Width="464">
+                    <ListBox ItemsSource="{Binding clItemL}" IsSynchronizedWithCurrentItem="True" x:Name="lb1" HorizontalAlignment="Left" Height="134" Margin="10,69,0,0" VerticalAlignment="Top" Width="464">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <ListBoxItem IsSelected="{Binding IsChecked}">

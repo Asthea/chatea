@@ -38,6 +38,7 @@ namespace RiftChatMetro
 
         private System.Windows.Threading.DispatcherTimer dispatcherTimer1 = new System.Windows.Threading.DispatcherTimer();
         private System.Windows.Threading.DispatcherTimer dispatcherTimer2 = new System.Windows.Threading.DispatcherTimer();
+        private System.Windows.Threading.DispatcherTimer dispatcherTimer3 = new System.Windows.Threading.DispatcherTimer();
 
         public ObservableCollection<CheckedListItem> clItemL = new ObservableCollection<CheckedListItem>();
         private ObservableCollection<CheckedListItem> alertsCLItemL = new ObservableCollection<CheckedListItem>();
@@ -66,6 +67,9 @@ namespace RiftChatMetro
             dispatcherTimer2.Interval = new TimeSpan(0, 0, 0, 0, 10);
             dispatcherTimer2.Start();
             //  --------------------------------------------------- //
+            dispatcherTimer3.Tick += dispatcherTimer_Tick3;
+            dispatcherTimer3.Interval = new TimeSpan(0, 0, 0, 0, 500);
+            dispatcherTimer3.Start();
 
             string path = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\RIFT\\";
             string logFilename = "log.txt";
@@ -93,6 +97,18 @@ namespace RiftChatMetro
             cc.write(line);
         }
 
+        private void dispatcherTimer_Tick3(object sender, EventArgs e)
+        {
+            var isNotCheckedItem = clItemL.Where(item => item.IsChecked == false);
+            Debug.WriteLine(isNotCheckedItem.Count());
+            
+            foreach (CheckedListItem c in isNotCheckedItem)
+            {
+                // deactivate filter 
+                // ...
+            }
+        }
+
         private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             reader.destroyReader();
@@ -118,8 +134,7 @@ namespace RiftChatMetro
             contentFilter.setColor(colpi1.SelectedColor);
             lEval.registerFilter(contentFilter);
             
-            clItemL.Add(cli);
-            
+            clItemL.Add(cli);           
             lb1.Items.Refresh();
         }
 
