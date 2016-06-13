@@ -57,7 +57,7 @@ namespace RiftChatMetro
             file = new System.IO.StreamReader(fStream);
 
             // Start reading at Begin/End of file
-            this.fStream.Seek(0, SeekOrigin.End);
+            this.fStream.Seek(0, SeekOrigin.Begin);
             currPosition = fStream.Position;
         }
 

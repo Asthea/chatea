@@ -1,10 +1,12 @@
 ﻿using MahApps.Metro.Controls;
+using Microsoft.Win32;
 using RiftChatMetro.FilterSystem;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Media;
 using System.Text;
@@ -65,31 +67,46 @@ namespace RiftChatMetro
 
             //  --------------------------------------------------- //
             dispatcherTimer1.Tick += dispatcherTimer_Tick1;
-            dispatcherTimer1.Interval = new TimeSpan(0, 0, 0, 0, 10);
-            dispatcherTimer1.Start();
+            dispatcherTimer1.Interval = new TimeSpan(0, 0, 0, 0, 10);            
             //  --------------------------------------------------- //
             dispatcherTimer2.Tick += dispatcherTimer_Tick2;
             dispatcherTimer2.Interval = new TimeSpan(0, 0, 0, 0, 10);
-            dispatcherTimer2.Start();
             //  --------------------------------------------------- //
             dispatcherTimer3.Tick += dispatcherTimer_Tick3;
             dispatcherTimer3.Interval = new TimeSpan(0, 0, 0, 0, 500);
-            dispatcherTimer3.Start();
-
-            string path = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\RIFT\\";
-            string logFilename = "log.txt";
-
-            fullPath = path + logFilename;
+            //  --------------------------------------------------- //
 
             Filter channelFilter = new ChannelFilter();
-            lEval.registerFilter(channelFilter);
-
-            this.reader = new Reader(fullPath, sc, lEval);          
+            lEval.registerFilter(channelFilter);      
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            // Implement openfiledialog ...
+            string path = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\RIFT\\";
+            string logFilename = "log.txt";
+
+            if (!File.Exists(path + logFilename))
+            {
+                OpenFileDialog oFD = new OpenFileDialog();
+                oFD.DefaultExt = ".txt";
+                oFD.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+
+                Nullable<bool> result = oFD.ShowDialog();
+                if (result == true)
+                {
+                    fullPath = oFD.FileName;
+                }
+            }
+            else
+            {
+                fullPath = path + logFilename;
+            }
+
+            this.reader = new Reader(fullPath, sc, lEval);
+
+            dispatcherTimer1.Start();
+            dispatcherTimer2.Start();
+            dispatcherTimer3.Start();
         }
 
         private void dispatcherTimer_Tick1(object sender, EventArgs e)
