@@ -13,7 +13,6 @@ namespace RiftChatMetro
 {
     public class LineEvaluator : ObservableCollection<Line>
     {
-
         private Dictionary<string, Brush> customMaskD = new Dictionary<string, Brush>();
         private List<Filter> activatedFilters;
         private List<Filter> deactivatedFilters;
@@ -131,7 +130,7 @@ namespace RiftChatMetro
             }
             line.Content = line.Content.TrimStart();
 
-            //  Get Player and Channel information via RegEx
+            // Get Player and Channel information via RegEx
             // if count == 2 -> normal channel
             var v = Regex.Matches(divide[0], @"\[([^]]*)\]");
             if (v.Count > 0 && v[0].Value.Contains("@"))
@@ -145,13 +144,10 @@ namespace RiftChatMetro
                 line.Shard = "unknown";
             }
 
-            //  Check type of message
+            // Check type of message
             if (v.Count == 1)
             {
                 List<string> split2 = text.Split(new char[] { ' ' }).ToList<string>();
-
-                //Console.WriteLine("v.Count = 1; Line: " + text);
-                //string check = split2[3].ToLower();
                 foreach (string s in split2)
                 {
                     if (s.ToLower().Equals("to") || s.ToLower().Equals("an") || s.ToLower().Equals("whisper") || s.ToLower().Contains("flüster"))
@@ -197,29 +193,18 @@ namespace RiftChatMetro
                 }
             }
 
-            //  Get color coding
+            // Get color coding
             line.Color = null;
             line.ContentColor = null;
 
-            Debug.WriteLine(line.Channel + " | " + line.Content);
+            //Debug.WriteLine(line.Channel + " | " + line.Content);
 
-            //  Check for custom masks
+            // Check for custom masks
             //evaluateCustomMasks(line);
             evaluateFilters(line);
 
             return line;
         }
-
-        //private void evaluateCustomMasks(Line line)
-        //{
-        //    foreach (KeyValuePair<string, Brush> kvp in customMaskD)
-        //    {
-        //        if (line.Content.ToLower().Contains(kvp.Key.ToLower()))
-        //        {
-        //            line.ContentColor = kvp.Value;
-        //        }
-        //    }
-        //}
 
         private void evaluateFilters(Line line)
         {

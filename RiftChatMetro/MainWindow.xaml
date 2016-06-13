@@ -46,111 +46,116 @@
                     </Rectangle>
                     <TextBlock Margin="4 0 0 0"
                    VerticalAlignment="Center"
-                   Text="deploy cupcakes" />
+                   Text="\ (: /" />
                 </StackPanel>
             </Button>
         </Controls:WindowCommands>
     </Controls:MetroWindow.RightWindowCommands>
 
-    <Grid Width="Auto" Margin="0,0,0,10">
+    <Grid x:Name="grid" Width="Auto" Margin="0,0,0,12">
         <Grid.RowDefinitions>
-            <RowDefinition Height="797*"/>
-            <RowDefinition Height="4*"/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
-            <ColumnDefinition Width="0*"/>
-            <ColumnDefinition Width="0*"/>
-            <ColumnDefinition Width="0*"/>
-            <ColumnDefinition Width="0*"/>
+            <ColumnDefinition Width="0*" />
         </Grid.ColumnDefinitions>
-        <Controls:MetroAnimatedTabControl x:Name="tab1" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="295" Width="486" UseLayoutRounding="False" BorderBrush="#FF086F9E" BorderThickness="1">
-            <TabItem x:Name="tab3" Header="Maske">
-                <Grid x:Name="tab1grid" Background="#FF252525">
-                    <TextBox x:Name="tb1" HorizontalAlignment="Left" Height="29" Margin="161,20,0,0" TextWrapping="Wrap" Text="Hier Suchmaske einfügen ..." VerticalAlignment="Top" Width="315" BorderBrush="White" Background="#FF1284B8" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontStyle="Italic" GotFocus="tb1_GotFocus"/>
-                    <Button x:Name="b1" Content="Hinzufügen" HorizontalAlignment="Left" Margin="10,20,0,0" VerticalAlignment="Top" Width="88" Height="29" Click="b1_Click"/>
-                    <ListBox ItemsSource="{Binding clItemL}" IsSynchronizedWithCurrentItem="True" x:Name="lb1" HorizontalAlignment="Left" Height="134" Margin="10,69,0,0" VerticalAlignment="Top" Width="464">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <ListBoxItem IsSelected="{Binding IsChecked}">
-                                    <CheckBox IsChecked="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}, Path=IsSelected}" Content="{Binding Path=Content}" />
-                                </ListBoxItem>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                    <Button x:Name="b3" HorizontalAlignment="Left" Margin="10,295,0,0" VerticalAlignment="Top" Width="53" Height="29"/>
-                    <xctk:ColorPicker x:Name="colpi1" Margin="103,20,330,207" />
-                    <Button x:Name="deleteUnCheckedButton" Content="UNMARKIERTE LÖSCHEN" HorizontalAlignment="Left" Margin="300,215,0,10" Width="176" Click="deleteUnCheckedButtonClick"/>
-                </Grid>
-            </TabItem>
-            <TabItem x:Name="tab2" Header="Alerts">
-                <Grid Background="#FF252525">
-                    <xctk:ColorPicker x:Name="alertsColpi" Margin="103,21,330,206" />
-                    <Button x:Name="alertsB1" Content="Hinzufügen" HorizontalAlignment="Left" Margin="10,20,0,0" VerticalAlignment="Top" Width="88" Height="29" Click="alertsB1_Click"/>
-                    <TextBox x:Name="alertsTB1" HorizontalAlignment="Left" Height="29" Margin="161,20,0,0" TextWrapping="Wrap" Text="Hier Suchmaske einfügen ..." VerticalAlignment="Top" Width="315" BorderBrush="White" Background="#FF1284B8" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontStyle="Italic" GotFocus="alertsTB1_GotFocus"/>
-                    <ListBox DataContext="{Binding Source={StaticResource clItem}}" IsSynchronizedWithCurrentItem="True" x:Name="alertsLB1" HorizontalAlignment="Left" Height="134" Margin="10,69,0,0" VerticalAlignment="Top" Width="464">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <ListBoxItem>
-                                    <CheckBox IsChecked="{Binding IsChecked}" Content="{Binding Content}" />
-                                </ListBoxItem>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                    <Button x:Name="alertsB2" Content="Alle löschen" HorizontalAlignment="Left" Margin="388,217,0,8" Width="88" Click="alertsB2_Click"/>
-                </Grid>
-            </TabItem>
-            <TabItem x:Name="tab4" Header="Tracker">
-                <Grid Background="#FF252525"/>
-            </TabItem>
-            <TabItem x:Name="tab5" Header="Translator">
-                <Grid Background="#FF252525">
-                    <Button x:Name="b_apiKey" Content="Set API-Key" HorizontalAlignment="Left" Margin="10,20,0,0" VerticalAlignment="Top" Width="88" Height="29" Click="b_apiKey_Click"/>
-                    <TextBox x:Name="tb_apiKey" HorizontalAlignment="Left" Height="29" Margin="103,20,0,0" TextWrapping="Wrap" Text="Hier Suchmaske einfügen ..." VerticalAlignment="Top" Width="373" BorderBrush="White" Background="#FF1284B8" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontStyle="Italic" GotFocus="tb_apiKey_GotFocus"/>
-                </Grid>
-            </TabItem>
-        </Controls:MetroAnimatedTabControl>
+        <StackPanel x:Name="stackPanel" HorizontalAlignment="Stretch" Height="{Binding ActualHeight, ElementName=grid, Mode=OneWay}" Margin="10,10,10,0" VerticalAlignment="Top">
+            <Expander ExpandDirection="Down" IsExpanded="False" x:Name="expander" Header="Tools" HorizontalAlignment="Left" VerticalAlignment="Top" Width="498">
+                <Controls:MetroAnimatedTabControl x:Name="tab1" HorizontalAlignment="Left" VerticalAlignment="Top" Height="295" Width="486" UseLayoutRounding="False" BorderBrush="#FF086F9E" BorderThickness="1">
+                    <TabItem x:Name="tab3" Header="Maske">
+                        <Grid x:Name="tab1grid" Background="#FF252525">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBox x:Name="tb1" HorizontalAlignment="Left" Height="29" Margin="161,20,0,0" TextWrapping="Wrap" Text="Hier Suchmaske einfügen ..." VerticalAlignment="Top" Width="315" BorderBrush="White" Background="#FF1284B8" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontStyle="Italic" GotFocus="tb1_GotFocus" Grid.RowSpan="2"/>
+                            <Button x:Name="b1" Content="Hinzufügen" HorizontalAlignment="Left" Margin="10,20,0,0" VerticalAlignment="Top" Width="88" Height="29" Click="b1_Click" Grid.RowSpan="2"/>
+                            <ListBox ItemsSource="{Binding clItemL}" IsSynchronizedWithCurrentItem="True" x:Name="lb1" HorizontalAlignment="Left" Height="134" Margin="10,35,0,0" VerticalAlignment="Top" Width="464" Grid.Row="1">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <ListBoxItem IsSelected="{Binding IsChecked}">
+                                            <CheckBox IsChecked="{Binding IsSelected, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" Content="{Binding Content}" />
+                                        </ListBoxItem>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                            <Button x:Name="b3" HorizontalAlignment="Left" Margin="10,261,0,-70" VerticalAlignment="Top" Width="53" Height="29" Grid.Row="1"/>
+                            <xctk:ColorPicker x:Name="colpi1" Margin="103,20,330,207" Grid.RowSpan="2" />
+                            <Button x:Name="deleteUnCheckedButton" Content="UNMARKIERTE LÖSCHEN" HorizontalAlignment="Left" Margin="300,181,0,10" Width="176" Click="deleteUnCheckedButtonClick" Grid.Row="1"/>
+                        </Grid>
+                    </TabItem>
+                    <TabItem x:Name="tab2" Header="Ring">
+                        <Grid Background="#FF252525">
+                            <xctk:ColorPicker x:Name="alertsColpi" Margin="103,21,330,206" />
+                            <Button x:Name="alertsB1" Content="Hinzufügen" HorizontalAlignment="Left" Margin="10,20,0,0" VerticalAlignment="Top" Width="88" Height="29" Click="alertsB1_Click"/>
+                            <TextBox x:Name="alertsTB1" HorizontalAlignment="Left" Height="29" Margin="161,20,0,0" TextWrapping="Wrap" Text="Hier Suchmaske einfügen ..." VerticalAlignment="Top" Width="315" BorderBrush="White" Background="#FF1284B8" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontStyle="Italic" GotFocus="alertsTB1_GotFocus"/>
+                            <ListBox DataContext="{Binding alertsCLItemL}" IsSynchronizedWithCurrentItem="True" x:Name="alertsLB1" HorizontalAlignment="Left" Height="134" Margin="10,69,0,0" VerticalAlignment="Top" Width="464">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <ListBoxItem>
+                                            <CheckBox IsChecked="{Binding IsChecked}" Content="{Binding Content}" />
+                                        </ListBoxItem>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                            <Button x:Name="deleteUnCheckedButtonRing" Content="UNMARKIERTE LÖSCHEN" HorizontalAlignment="Left" Margin="300,215,0,10" Width="176" Click="deleteUnCheckedButtonRingClick"/>
+                        </Grid>
+                    </TabItem>
+                    <TabItem x:Name="tab4" Header="Tracker">
+                        <Grid Background="#FF252525"/>
+                    </TabItem>
+                    <TabItem x:Name="tab5" Header="Translator">
+                        <Grid Background="#FF252525">
+                            <Button x:Name="b_apiKey" Content="Set API-Key" HorizontalAlignment="Left" Margin="10,20,0,0" VerticalAlignment="Top" Width="88" Height="29" Click="b_apiKey_Click"/>
+                            <TextBox x:Name="tb_apiKey" HorizontalAlignment="Left" Height="29" Margin="103,20,0,0" TextWrapping="Wrap" Text="Hier Suchmaske einfügen ..." VerticalAlignment="Top" Width="373" BorderBrush="White" Background="#FF1284B8" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontStyle="Italic" GotFocus="tb_apiKey_GotFocus"/>
+                        </Grid>
+                    </TabItem>
+                </Controls:MetroAnimatedTabControl>
+            </Expander>
+            <DataGrid ItemsSource="{Binding}" x:Name="dg1"  Width="{Binding ActualWidth, ElementName=stackPanel, Mode=OneWay}" HorizontalAlignment="Left" PreviewMouseDoubleClick="dg1_PreviewMouseDoubleClick" IsSynchronizedWithCurrentItem="True" IsHitTestVisible="True" IsTextSearchCaseSensitive="True" PreviewMouseWheel="dg1_PreviewMouseWheel" MouseLeave="dg1_MouseLeave" AutoGenerateColumns="False" LoadingRow="dg1_LoadingRow" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#FF086FB9" IsReadOnly="True" FontSize="14" ClipToBounds="True" HorizontalScrollBarVisibility="Disabled" EnableColumnVirtualization="True" VerticalScrollBarVisibility="Visible" MinHeight="150" Padding="0,0,0,50" Margin="0,0,0,150" Height="{Binding ActualHeight, ElementName=grid, Mode=OneWay}" >
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Time" Binding="{Binding Header}" Width="*">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style>
+                                <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                                <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                                <Setter Property="TextBlock.FontSize" Value="11"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Channel" Binding="{Binding Channel}" Width="*">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style>
+                                <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                                <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                                <Setter Property="TextBlock.FontSize" Value="11"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Player" Binding="{Binding Player}" Width="2*">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style>
+                                <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                                <Setter Property="TextBlock.TextAlignment" Value="Center"/>
+                                <Setter Property="TextBlock.FontSize" Value="11"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Content" Binding="{Binding Content}" Width="6*">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style>
+                                <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                                <Setter Property="TextBlock.TextAlignment" Value="Left"/>
+                                <Setter Property="TextBlock.FontSize" Value="11"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
 
-        <DataGrid ItemsSource="{Binding}" x:Name="dg1" VerticalAlignment="Top" Height="Auto" Width="Auto" HorizontalAlignment="Left" Margin="10,310,0,0" PreviewMouseDoubleClick="dg1_PreviewMouseDoubleClick" IsSynchronizedWithCurrentItem="True" IsHitTestVisible="True" IsTextSearchCaseSensitive="True" PreviewMouseWheel="dg1_PreviewMouseWheel" MouseLeave="dg1_MouseLeave" AutoGenerateColumns="False" LoadingRow="dg1_LoadingRow" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#FF086FB9" IsReadOnly="True" FontSize="14" ClipToBounds="True" HorizontalScrollBarVisibility="Disabled" EnableColumnVirtualization="True" VerticalScrollBarVisibility="Visible" >
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Header" Binding="{Binding Header}" Width="*">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style>
-                            <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
-                            <Setter Property="TextBlock.TextAlignment" Value="Center"/>
-                            <Setter Property="TextBlock.FontSize" Value="11"/>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
-                <DataGridTextColumn Header="Channel" Binding="{Binding Channel}" Width="*">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style>
-                            <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
-                            <Setter Property="TextBlock.TextAlignment" Value="Center"/>
-                            <Setter Property="TextBlock.FontSize" Value="11"/>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
-                <DataGridTextColumn Header="Player" Binding="{Binding Player}" Width="2*">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style>
-                            <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
-                            <Setter Property="TextBlock.TextAlignment" Value="Center"/>
-                            <Setter Property="TextBlock.FontSize" Value="11"/>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
-                <DataGridTextColumn Header="Content" Binding="{Binding Content}" Width="6*">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style>
-                            <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
-                            <Setter Property="TextBlock.TextAlignment" Value="Left"/>
-                            <Setter Property="TextBlock.FontSize" Value="11"/>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
-            </DataGrid.Columns>
-        </DataGrid>
+
 
         <!-- <DataGrid ItemsSource="{Binding}" x:Name="dg2" HorizontalAlignment="Left" Margin="0,719,0,0" Width="Auto" PreviewMouseDoubleClick="dg1_PreviewMouseDoubleClick" IsSynchronizedWithCurrentItem="True" IsHitTestVisible="True" IsTextSearchCaseSensitive="True" PreviewMouseWheel="dg1_PreviewMouseWheel" MouseLeave="dg1_MouseLeave" AutoGenerateColumns="False" LoadingRow="dg1_LoadingRow" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#FF086FB9" Height="135" VerticalAlignment="Top" IsReadOnly="True" FontSize="12" VerticalScrollBarVisibility="Visible" >
             <DataGrid.Columns>
@@ -241,9 +246,6 @@
                 </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid> -->
-        <CheckBox x:Name="soundfilterCB" Content="Soundfilter" HorizontalAlignment="Left" Margin="519,50,0,0" VerticalAlignment="Top" Click="soundfilterCB_Click"/>
-        <TextBox x:Name="soundfilterTB" HorizontalAlignment="Left" Height="23" Margin="629,47,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="262"/>
-
     </Grid>
 
 </Controls:MetroWindow>

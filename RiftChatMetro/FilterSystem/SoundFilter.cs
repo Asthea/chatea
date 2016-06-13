@@ -43,10 +43,13 @@ namespace RiftChatMetro.FilterSystem
                 line.Color = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(178, 34, 34));
                 line.ContentColor = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(178, 34, 34));
 
+                var numberOfRings = Convert.ToInt32(split[1]);
+                if (numberOfRings >= 20) numberOfRings = 20;
+
                 ring(
                     () => {System.Media.SystemSounds.Beep.Play(); },
                     () => { Console.WriteLine("beep"); },
-                    Convert.ToInt32(split[1])
+                    numberOfRings
                     );
             }
         }

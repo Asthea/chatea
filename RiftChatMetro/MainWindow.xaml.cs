@@ -27,6 +27,7 @@ namespace RiftChatMetro
     /// </summary>
     public partial class MainWindow : MetroWindow
     {
+
         string fullPath;
 
         private Reader reader;
@@ -40,6 +41,8 @@ namespace RiftChatMetro
         private System.Windows.Threading.DispatcherTimer dispatcherTimer1 = new System.Windows.Threading.DispatcherTimer();
         private System.Windows.Threading.DispatcherTimer dispatcherTimer2 = new System.Windows.Threading.DispatcherTimer();
         private System.Windows.Threading.DispatcherTimer dispatcherTimer3 = new System.Windows.Threading.DispatcherTimer();
+
+        private System.Windows.Forms.ColorDialog cd = new System.Windows.Forms.ColorDialog();
 
         public ObservableCollection<CheckedListItem> clItemL = new ObservableCollection<CheckedListItem>();
         private ObservableCollection<CheckedListItem> alertsCLItemL = new ObservableCollection<CheckedListItem>();
@@ -86,6 +89,7 @@ namespace RiftChatMetro
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            // Implement openfiledialog ...
         }
 
         private void dispatcherTimer_Tick1(object sender, EventArgs e)
@@ -101,8 +105,11 @@ namespace RiftChatMetro
 
         private void dispatcherTimer_Tick3(object sender, EventArgs e)
         {
-            var isNotCheckedItem = clItemL.Where(item => item.IsChecked == false);
-            var isCheckedItem = clItemL.Where(item => item.IsChecked == true);
+            List<CheckedListItem> isNotCheckedItem = clItemL.Where(item => item.IsChecked == false).ToList();
+            isNotCheckedItem.AddRange(alertsCLItemL.Where(item => item.IsChecked == false).ToList());
+
+            List<CheckedListItem> isCheckedItem = clItemL.Where(item => item.IsChecked == true).ToList();
+            isCheckedItem.AddRange(alertsCLItemL.Where(item => item.IsChecked == true).ToList());
             
             // deactive unchecked filters
             foreach (CheckedListItem c in isNotCheckedItem)
@@ -160,12 +167,60 @@ namespace RiftChatMetro
             lb1.Items.Refresh();
         }
 
+        private void alertsB1_Click(object sender, RoutedEventArgs e)
+        {
+            if (alertsTB1.Text == "" || alertsTB1.Text == "Hier Suchmaske einfügen ...")
+            {
+                MessageBox.Show("Es muss erst eine Suchmaske angegeben werden!");
+                return;
+            }
+
+            CheckedListItem cli = new CheckedListItem();
+            cli.Content = alertsTB1.Text;
+            cli.IsChecked = true;
+            cli.ID = generateID();
+
+            Filter soundFilter = new SoundFilter(alertsTB1.Text, cli.ID);
+            soundFilter.setColor(alertsColpi.SelectedColor);
+            lEval.registerFilter(soundFilter);
+
+            alertsCLItemL.Add(cli);
+            alertsLB1.Items.Refresh();
+        }
+
+        private void deleteUnCheckedButtonClick(object sender, RoutedEventArgs e)
+        {
+            lEval.deleteDeactivatedFilters();
+
+            var isNotCheckedItem = clItemL.Where(item => item.IsChecked == false);
+            foreach (CheckedListItem c in isNotCheckedItem.ToList()) // .ToList() counters enumeration error! \ (: /
+            {
+                clItemL.Remove(c);
+            }
+            lb1.Items.Refresh();
+        }
+
+        private void deleteUnCheckedButtonRingClick(object sender, RoutedEventArgs e)
+        {
+            lEval.deleteDeactivatedFilters();
+
+            var isNotCheckedItem = alertsCLItemL.Where(item => item.IsChecked == false);
+            foreach (CheckedListItem c in isNotCheckedItem.ToList()) // .ToList() counters enumeration error! \ (: /
+            {
+                alertsCLItemL.Remove(c);
+            }
+            alertsLB1.Items.Refresh();
+        }
+
         private void tb1_GotFocus(object sender, RoutedEventArgs e)
         {
             tb1.Text = "";
         }
 
-        private System.Windows.Forms.ColorDialog cd = new System.Windows.Forms.ColorDialog();
+        private void alertsTB1_GotFocus(object sender, RoutedEventArgs e)
+        {
+            alertsTB1.Text = "";
+        }
 
         private void b_apiKey_Click(object sender, RoutedEventArgs e)
         {
@@ -208,81 +263,6 @@ namespace RiftChatMetro
             catch
             {
             }
-        }
-
-        private void soundfilterCB_Click(object sender, RoutedEventArgs e)
-        {
-            if (soundfilterTB.Text == "") return;
-
-            soundfilterCB.Content = soundfilterTB.Text;
-
-            if (soundfilterCB.IsChecked == true)
-            {
-                //Filter filter = new SoundFilter(soundfilterTB.Text);
-                //this.filterD.Add((string)soundfilterCB.Content, filter);
-                //lEval.registerFilter(filter);
-            }
-            else
-            {
-                //lEval.unregisterFilter(filterD[(string)soundfilterCB.Content]);
-                //this.filterD.Remove((string)soundfilterCB.Content);
-            }
-        }
-
-        private void alertsB1_Click(object sender, RoutedEventArgs e)
-        {
-            if (alertsTB1.Text == "" || alertsTB1.Text == "Hier Suchmaske einfügen ...")
-            {
-                MessageBox.Show("Es muss erst eine Suchmaske angegeben werden!");
-                return;
-            }
-
-            CheckedListItem cli = new CheckedListItem();
-            cli.Content = alertsTB1.Text;
-            cli.IsChecked = true;
-            cli.ID = generateID();
-
-            Filter filter = new LFPlayer(alertsTB1.Text, cli.ID);
-            this.filterD.Add(alertsTB1.Text, filter);
-            lEval.registerFilter(filter);
-            //this.reader.getStorage().registerFilter(filter);
-
-            alertsCLItemL.Add(cli);
-            alertsLB1.Items.Refresh();
-        }
-
-        private void alertsB2_Click(object sender, RoutedEventArgs e)
-        {
-            //foreach (var item in alertsCLItemL)
-            //{
-            //    MacroManager.deleteMapping(item.Content);
-            //    sc.unregisterCustomMasks();
-            //}
-
-            foreach (KeyValuePair<string, Filter> kvp in filterD)
-            {
-                //this.reader.getStorage().unregisterFilter(kvp.Value);
-            }
-
-            alertsCLItemL.Clear();
-            alertsLB1.Items.Refresh();
-        }
-
-        private void alertsTB1_GotFocus(object sender, RoutedEventArgs e)
-        {
-            alertsTB1.Text = "";
-        }
-
-        private void deleteUnCheckedButtonClick(object sender, RoutedEventArgs e)
-        {            
-            //lEval.deleteDeactivatedFilters();
-
-            var isNotCheckedItem = clItemL.Where(item => item.IsChecked == false);
-            foreach (CheckedListItem c in isNotCheckedItem.ToList()) // .ToList() counters enumeration error! \ (: /
-            {
-                clItemL.Remove(c);
-            }
-            lb1.Items.Refresh();
         }
     }
 
