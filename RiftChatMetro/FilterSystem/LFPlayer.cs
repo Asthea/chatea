@@ -33,7 +33,17 @@ namespace RiftChatMetro.FilterSystem
 
         public void filter(Line line)
         {
-            if (isActivated == true && line.Player.ToLower().Contains(playerName.ToLower()))
+            var player = "";
+            if (line.Player.Contains("@"))
+            {
+                player = line.Player.Split(new char[] { '@' })[0].ToLower();
+            }
+            else
+            {
+                player = line.Player.ToLower();
+            }
+
+            if (isActivated == true && player.Contains(playerName.ToLower()))
             {
                 line.Color = new System.Windows.Media.SolidColorBrush(this.color);
                 line.ContentColor = new System.Windows.Media.SolidColorBrush(this.color);
@@ -53,6 +63,11 @@ namespace RiftChatMetro.FilterSystem
         public string getName()
         {
             return "lfplayer" + Convert.ToString(identity);
+        }
+
+        public object getObject()
+        {
+            return null;
         }
     }
 }

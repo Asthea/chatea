@@ -17,7 +17,6 @@ namespace RiftChatMetro
         public string Header { get; set; }
         public string Player { get; set; }
         public string Shard { get; set; }
-        public bool IsDisposable { get; set; }
 
         public List<string> getLinks()
         {

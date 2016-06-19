@@ -103,7 +103,10 @@
                         </Grid>
                     </TabItem>
                     <TabItem x:Name="tab4" Header="Tracker">
-                        <Grid Background="#FF252525"/>
+                        <Grid Background="#FF252525">
+                            <TextBox x:Name="numberOfPlayersTB" HorizontalAlignment="Left" Height="26" Margin="241,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="233" BorderBrush="White" Background="#FF1284B8" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontStyle="Italic" RenderTransformOrigin="0.521,0.552" Focusable="False"/>
+                            <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="16" Foreground="White"><Run Text="Number of Play"/><Run Text="ers registered :"/></TextBlock>
+                        </Grid>
                     </TabItem>
                     <TabItem x:Name="tab5" Header="Translator">
                         <Grid Background="#FF252525">

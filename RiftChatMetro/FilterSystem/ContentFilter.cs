@@ -54,5 +54,10 @@ namespace RiftChatMetro.FilterSystem
         {
             return "contentfilter" + Convert.ToString(identity);
         }
+
+        public object getObject()
+        {
+            return null;
+        }
     }
 }

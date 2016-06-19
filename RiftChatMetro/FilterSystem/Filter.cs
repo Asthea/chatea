@@ -15,6 +15,7 @@ namespace RiftChatMetro.FilterSystem
         long getIdentity();
         string getName();
         void setColor(Color color);
+        object getObject();
         //void setID(int id);
     }
 }

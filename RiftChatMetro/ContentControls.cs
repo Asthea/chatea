@@ -83,8 +83,6 @@ namespace RiftChatMetro
                     item.ScrollIntoView(item.Items.GetItemAt(item.Items.Count - 1));
                 }
             }
-
-            line.IsDisposable = true;
             
             //updateAll();
         }

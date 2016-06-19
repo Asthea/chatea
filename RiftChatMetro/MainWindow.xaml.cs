@@ -67,17 +67,14 @@ namespace RiftChatMetro
 
             //  --------------------------------------------------- //
             dispatcherTimer1.Tick += dispatcherTimer_Tick1;
-            dispatcherTimer1.Interval = new TimeSpan(0, 0, 0, 0, 10);            
+            dispatcherTimer1.Interval = new TimeSpan(0, 0, 0, 0, 100);            
             //  --------------------------------------------------- //
             dispatcherTimer2.Tick += dispatcherTimer_Tick2;
-            dispatcherTimer2.Interval = new TimeSpan(0, 0, 0, 0, 10);
+            dispatcherTimer2.Interval = new TimeSpan(0, 0, 0, 0, 100);
             //  --------------------------------------------------- //
             dispatcherTimer3.Tick += dispatcherTimer_Tick3;
             dispatcherTimer3.Interval = new TimeSpan(0, 0, 0, 0, 500);
             //  --------------------------------------------------- //
-
-            Filter channelFilter = new ChannelFilter();
-            lEval.registerFilter(channelFilter);      
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -104,6 +101,12 @@ namespace RiftChatMetro
 
             this.reader = new Reader(fullPath, sc, lEval);
 
+            Filter channelFilter = new ChannelFilter();
+            lEval.registerFilter(channelFilter);
+
+            Filter numberOfPlayersFilter = new AnalyticsNumberOfPlayersFilter("analytics", 0);
+            lEval.registerFilter(numberOfPlayersFilter);
+
             dispatcherTimer1.Start();
             dispatcherTimer2.Start();
             dispatcherTimer3.Start();
@@ -117,6 +120,9 @@ namespace RiftChatMetro
         private void dispatcherTimer_Tick2(object sender, EventArgs e)
         {
             Line line = reader.getStorage().getNextElement();
+
+            lEval.getActiveFilterByUniqueName("numberofplayers0").filter(line);
+
             cc.write(line);
         }
 
@@ -145,6 +151,13 @@ namespace RiftChatMetro
                 {
                     lEval.activateFilter(f);
                 }
+            }
+
+            var activeFilters = lEval.getActivatedFiltersByID(0);
+            foreach (Filter f in activeFilters)
+            {
+                if (f.getName().Equals("numberofplayers" + "0"))
+                    numberOfPlayersTB.Text = f.getObject().ToString();
             }
         }
 

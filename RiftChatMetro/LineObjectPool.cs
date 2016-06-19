@@ -17,15 +17,6 @@ namespace RiftChatMetro
 
         public void put(Line line)
         {
-            if (line.IsDisposable == true)
-            {
-                line.IsDisposable = false;
-            }
-            else
-            {
-                return;
-            }
-
             lineQ.Push(line);
             Console.WriteLine("Stack size = " + lineQ.Count);
         }

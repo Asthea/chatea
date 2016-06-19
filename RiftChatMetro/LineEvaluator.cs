@@ -103,6 +103,20 @@ namespace RiftChatMetro
             deactivatedFilters.Add(filter);
         }
 
+        public Filter getActiveFilterByUniqueName(string uniqueName)
+        {
+            Filter filter = null;
+            foreach (Filter f in activatedFilters)
+            {
+                if (f.getName().ToLower().Equals(uniqueName.ToLower())) {
+                    filter = f;
+                    return filter;
+                }
+            }
+
+            return filter;
+        }
+
         // TODO: should actually be implemented with a strategy design pattern
         private Line evaluate(string text)
         {
@@ -111,7 +125,6 @@ namespace RiftChatMetro
 
             Line line = new Line();
 
-            line.IsDisposable = false;
             line.Text = text;
 
             //  Get header

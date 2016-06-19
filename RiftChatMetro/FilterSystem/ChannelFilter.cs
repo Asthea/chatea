@@ -104,19 +104,23 @@ namespace RiftChatMetro.FilterSystem
 
         private void initialize()
         {
-            colors.Add("orange", new SolidColorBrush(Color.FromRgb(255, 165, 0)));
-            colors.Add("blue", new SolidColorBrush(Color.FromRgb(20, 130, 180)));
-            colors.Add("forestgreen", Brushes.ForestGreen);
-            colors.Add("gray", Brushes.Gray);
+            colors.Add("orange", new SolidColorBrush(Color.FromRgb(193, 112, 3)));
+            colors.Add("blue1", new SolidColorBrush(Color.FromRgb(44, 97, 128)));
+            colors.Add("blue2", new SolidColorBrush(Color.FromRgb(45, 105, 140)));
+            colors.Add("blue3", new SolidColorBrush(Color.FromRgb(46, 113, 152)));
+            colors.Add("blue4", new SolidColorBrush(Color.FromRgb(47, 121, 164)));
+            colors.Add("blue5", new SolidColorBrush(Color.FromRgb(48, 129, 176)));
+            colors.Add("forestgreen", new SolidColorBrush(Color.FromRgb(58, 155, 49)));
+            colors.Add("gray", new SolidColorBrush(Color.FromRgb(122, 122, 122)));
             colors.Add("darkpink", new SolidColorBrush(Color.FromRgb(233, 24, 95)));
             colors.Add("coral", new SolidColorBrush(Color.FromRgb(255, 127, 80)));
             colors.Add("tomato", new SolidColorBrush(Color.FromRgb(255, 99, 71)));
 
-            channelColors.Add("level 1-29", colors["blue"]);
-            channelColors.Add("level 30-49", colors["blue"]);
-            channelColors.Add("level 50-59", colors["blue"]);
-            channelColors.Add("level 60-64", colors["blue"]);
-            channelColors.Add("level 65", colors["blue"]);
+            channelColors.Add("level 1-29", colors["blue1"]);
+            channelColors.Add("level 30-49", colors["blue2"]);
+            channelColors.Add("level 50-59", colors["blue3"]);
+            channelColors.Add("level 60-64", colors["blue4"]);
+            channelColors.Add("level 65", colors["blue5"]);
             channelColors.Add("guild", colors["forestgreen"]);
             channelColors.Add("whisper", colors["darkpink"]);
             channelColors.Add("crossevents", colors["orange"]);
@@ -149,6 +153,11 @@ namespace RiftChatMetro.FilterSystem
         public string getName()
         {
             return "channelfilter";
+        }
+
+        public object getObject()
+        {
+            return null;
         }
     }
 

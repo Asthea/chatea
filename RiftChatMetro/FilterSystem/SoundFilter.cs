@@ -89,5 +89,10 @@ namespace RiftChatMetro.FilterSystem
         {
             return "soundfilter" + Convert.ToString(getIdentity());
         }
+
+        public object getObject()
+        {
+            return null;
+        }
     }
 }
