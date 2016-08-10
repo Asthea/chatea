@@ -37,6 +37,8 @@ namespace RiftChatMetro.FilterSystem
             List<string> split = line.Content.Split(new char[] { ' ' }, 4).ToList<string>();
             if (split.Count < 3) return;
             if (split[2] != name) return;
+            if (!line.Channel.ToLower().Trim().Equals("whisper"))
+                return;
 
             if (split[0] == "ring")
             {
@@ -62,7 +64,7 @@ namespace RiftChatMetro.FilterSystem
                 {
                     for (int i = 0; i < numberOfRings; ++i)
                     {
-                        Thread.Sleep(1000);
+                        Thread.Sleep(1250);
                         method();
                     }    
                 }

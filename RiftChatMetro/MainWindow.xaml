@@ -10,7 +10,7 @@
                         xmlns:System="clr-namespace:System;assembly=mscorlib"
                         xmlns:Forms="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
                         x:Name="mainWindow" x:Class="RiftChatMetro.MainWindow"
-                        Title="Chatea :D"
+                        Title="{Binding MyTitle}"
                         Loaded="Window_Loaded" Closing="MetroWindow_Closing"
                         
                       BorderThickness="0" 
@@ -61,7 +61,7 @@
             <ColumnDefinition Width="0*" />
         </Grid.ColumnDefinitions>
         <StackPanel x:Name="stackPanel" HorizontalAlignment="Stretch" Height="{Binding ActualHeight, ElementName=grid, Mode=OneWay}" Margin="10,10,10,0" VerticalAlignment="Top">
-            <Expander ExpandDirection="Down" IsExpanded="False" x:Name="expander" Header="Tools" HorizontalAlignment="Left" VerticalAlignment="Top" Width="498">
+            <Expander ExpandDirection="Down" IsExpanded="False" x:Name="expander" Header="Tools" HorizontalAlignment="Center" VerticalAlignment="Top" Width="498">
                 <Controls:MetroAnimatedTabControl x:Name="tab1" HorizontalAlignment="Left" VerticalAlignment="Top" Height="295" Width="486" UseLayoutRounding="False" BorderBrush="#FF086F9E" BorderThickness="1">
                     <TabItem x:Name="tab3" Header="Maske">
                         <Grid x:Name="tab1grid" Background="#FF252525">
@@ -104,8 +104,7 @@
                     </TabItem>
                     <TabItem x:Name="tab4" Header="Tracker">
                         <Grid Background="#FF252525">
-                            <TextBox x:Name="numberOfPlayersTB" HorizontalAlignment="Left" Height="26" Margin="241,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="233" BorderBrush="White" Background="#FF1284B8" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontStyle="Italic" RenderTransformOrigin="0.521,0.552" Focusable="False"/>
-                            <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="16" Foreground="White"><Run Text="Number of Play"/><Run Text="ers registered :"/></TextBlock>
+                            <DataGrid x:Name="trackerDG" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="464" Height="234"/>
                         </Grid>
                     </TabItem>
                     <TabItem x:Name="tab5" Header="Translator">

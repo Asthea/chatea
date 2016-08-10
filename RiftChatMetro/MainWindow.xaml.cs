@@ -1,6 +1,7 @@
 ﻿using MahApps.Metro.Controls;
 using Microsoft.Win32;
 using RiftChatMetro.FilterSystem;
+using RiftChatMetro.Tools;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -43,15 +44,40 @@ namespace RiftChatMetro
         private System.Windows.Threading.DispatcherTimer dispatcherTimer1 = new System.Windows.Threading.DispatcherTimer();
         private System.Windows.Threading.DispatcherTimer dispatcherTimer2 = new System.Windows.Threading.DispatcherTimer();
         private System.Windows.Threading.DispatcherTimer dispatcherTimer3 = new System.Windows.Threading.DispatcherTimer();
+        private System.Windows.Threading.DispatcherTimer dispatcherTimer4 = new System.Windows.Threading.DispatcherTimer();
 
         private System.Windows.Forms.ColorDialog cd = new System.Windows.Forms.ColorDialog();
 
         public ObservableCollection<CheckedListItem> clItemL = new ObservableCollection<CheckedListItem>();
         private ObservableCollection<CheckedListItem> alertsCLItemL = new ObservableCollection<CheckedListItem>();
 
+        public static readonly DependencyProperty MyTitleProperty = DependencyProperty.Register("MyTitle", typeof(String), typeof(MainWindow));
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(String propertyName)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public String MyTitle
+        {
+            get { return (String)GetValue(MainWindow.MyTitleProperty); }
+            set
+            {
+                SetValue(MainWindow.MyTitleProperty, value);
+                OnPropertyChanged("MyTitle");
+            }
+        }
+
         public MainWindow()
         {
             InitializeComponent();
+
+            DataContext = this;
+
+            MyTitle = "Chatea :D";
 
             filterD = new Dictionary<string, Filter>();
             sc = new StorageContainer("chat");
@@ -75,6 +101,10 @@ namespace RiftChatMetro
             dispatcherTimer3.Tick += dispatcherTimer_Tick3;
             dispatcherTimer3.Interval = new TimeSpan(0, 0, 0, 0, 500);
             //  --------------------------------------------------- //
+            dispatcherTimer4.Tick += dispatcherTimer_Tick4;
+            dispatcherTimer4.Interval = new TimeSpan(0, 0, 1, 0, 0);
+            //  --------------------------------------------------- //
+
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -110,6 +140,7 @@ namespace RiftChatMetro
             dispatcherTimer1.Start();
             dispatcherTimer2.Start();
             dispatcherTimer3.Start();
+            dispatcherTimer4.Start();
         }
 
         private void dispatcherTimer_Tick1(object sender, EventArgs e)
@@ -157,8 +188,23 @@ namespace RiftChatMetro
             foreach (Filter f in activeFilters)
             {
                 if (f.getName().Equals("numberofplayers" + "0"))
-                    numberOfPlayersTB.Text = f.getObject().ToString();
+                {
+                    MyTitle = "Chatea :D ### " + f.getObject().ToString();
+                }
             }
+        }
+
+        private void dispatcherTimer_Tick4(object sender, EventArgs e)
+        {
+            var etm = new EventTrackerModule();
+
+            // https://richnewman.wordpress.com/2012/12/03/tutorial-asynchronous-programming-async-and-await-for-beginners/
+            new Action(async () =>
+            {
+                var result = await Task.Run<Dictionary<string, EventTrackerData>>(() => etm.Connect());
+
+            }).Invoke();
+
         }
 
         private long generateID()
@@ -269,6 +315,7 @@ namespace RiftChatMetro
 
             // TODO: Implement clipboard action!
             // ...
+            System.Windows.Clipboard.SetText(selectedItem.Content);
         }
 
         private void dg1_PreviewMouseWheel(object sender, MouseWheelEventArgs e)

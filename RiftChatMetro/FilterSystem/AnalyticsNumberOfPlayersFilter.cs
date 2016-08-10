@@ -17,6 +17,7 @@ namespace RiftChatMetro.FilterSystem
 
         private string path;
         private string currentFilePath;
+        private string currentRegion;
 
         private List<string> players;
         private List<string> EUplayers;
@@ -34,6 +35,7 @@ namespace RiftChatMetro.FilterSystem
             this.EUShards = new List<string>();
             this.NAShards = new List<string>();
             this.players = new List<string>();
+            this.currentRegion = "";
 
             EUShards.Add("Brutwacht");
             EUShards.Add("Typhiria");
@@ -69,6 +71,16 @@ namespace RiftChatMetro.FilterSystem
                     }
                 }
             }
+            File.Delete(path + "numberOfPlayersEU.txt");
+            using (FileStream fs = new FileStream(path + "numberOfPlayersEU.txt", FileMode.Append, FileAccess.Write))
+            using (StreamWriter sw = new StreamWriter(fs))
+            {
+                foreach (string s in EUplayers)
+                {
+                    sw.WriteLine(s);
+                }
+            }
+
             if (File.Exists(path + "numberOfPlayersNA.txt"))
             {
                 using (FileStream fs = new FileStream(path + "numberOfPlayersNA.txt", FileMode.Open, FileAccess.Read))
@@ -84,6 +96,15 @@ namespace RiftChatMetro.FilterSystem
                                 NAplayers.Add(line);
                         }
                     }
+                }
+            }
+            File.Delete(path + "numberOfPlayersNA.txt");
+            using (FileStream fs = new FileStream(path + "numberOfPlayersNA.txt", FileMode.Append, FileAccess.Write))
+            using (StreamWriter sw = new StreamWriter(fs))
+            {
+                foreach (string s in NAplayers)
+                {
+                    sw.WriteLine(s);
                 }
             }
         }
@@ -117,11 +138,13 @@ namespace RiftChatMetro.FilterSystem
                 {
                     this.currentFilePath = path + "numberOfPlayersEU.txt";
                     players = EUplayers;
+                    currentRegion = "EU";
                 }
                 else
                 {
                     this.currentFilePath = path + "numberOfPlayersNA.txt";
                     players = NAplayers;
+                    currentRegion = "NA";
                 }
             }
             else if (isEU == true && line.Player.Contains("@"))
@@ -133,6 +156,8 @@ namespace RiftChatMetro.FilterSystem
                         this.currentFilePath = path + "numberOfPlayersEU.txt";
                         isEU = true;
                         players = EUplayers;
+                        currentRegion = "EU";
+
                         break;
                     }
                     else
@@ -140,6 +165,7 @@ namespace RiftChatMetro.FilterSystem
                         isEU = false;
                         this.currentFilePath = path + "numberOfPlayersNA.txt";
                         players = NAplayers;
+                        currentRegion = "NA";
                     }
                 }
             }
@@ -152,6 +178,8 @@ namespace RiftChatMetro.FilterSystem
                         this.currentFilePath = path + "numberOfPlayersNA.txt";
                         isEU = false;
                         players = NAplayers;
+                        currentRegion = "NA";
+
                         break;
                     }
                     else
@@ -159,6 +187,7 @@ namespace RiftChatMetro.FilterSystem
                         this.currentFilePath = path + "numberOfPlayersNA.txt";
                         isEU = true;
                         players = EUplayers;
+                        currentRegion = "EU";
                     }
                 }
             }
@@ -177,7 +206,7 @@ namespace RiftChatMetro.FilterSystem
 
         public object getObject()
         {
-            return players.Count();
+            return "Registered players on " + this.currentRegion + ": " + players.Count();
         }
 
         public long getIdentity()
